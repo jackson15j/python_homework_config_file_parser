@@ -1,0 +1,24 @@
+[project]
+name = "config_file_parser"
+version = "0.0.1"
+license = {file = "LICENSE"}
+authors = [
+  { name="Craig Astill", email="craigastill@gmail.com" },
+]
+description = "A small example package."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["config", "parser"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jackson15j/python_homework_config_file_parser"
+"Bug Tracker" = "https://github.com/jackson15j/python_homework_config_file_parser/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
