@@ -1,6 +1,6 @@
 [project]
 name = "config_file_parser"
-version = "0.0.1"
+dynamic = ["version"]
 license = {file = "LICENSE"}
 authors = [
   { name="Craig Astill", email="craigastill@gmail.com" },
@@ -27,9 +27,22 @@ test = [
 ]
 
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=62.6", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools_scm]
+# Version number construction and guessing based off most recent tag is done
+# with the following config. Going with a simple dev format, instead of the
+# opinonated versioning based off branches (which would be more useful on a
+# Release/Feature managed product.
+# See: https://github.com/pypa/setuptools_scm#version-number-construction.
+local_scheme = 'no-local-version'
+version_scheme = 'no-guess-dev'
+
+[tool.setuptools.dynamic]
+# Config for dynamic versioning from last Git tag. See:
+# https://github.com/pypa/setuptools_scm/
+version = { attr = "setuptools_scm.get_version" }
 
 [tool.pytest.ini_options]
 # Directories that are not visited by pytest collector:
