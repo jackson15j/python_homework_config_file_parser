@@ -1,0 +1,41 @@
+# This workflow will install Python dependencies, run tests and lint with a
+# single version of Python For more information see:
+# https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Build package
+
+on:
+  # NOTE: Opening up to build against all branches, due to doing merges
+  # locally. Typically I would stick with PR-building + Authoritative
+  # Branch/Tag building.
+  push:
+  pull_request:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # TODO: Add additional supported python versions.
+        python-version: ["3.11", ]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Deps - Install dependencies
+      run: pip install .
+    # TODO: Add Linting.
+    - name: Deps - Install test dependencies
+      run: pip install .[test]
+    - name: Tests - pytest
+      run: pytest
