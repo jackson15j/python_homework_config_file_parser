@@ -39,3 +39,13 @@ jobs:
       run: pip install .[test]
     - name: Tests - pytest
       run: pytest
+    - name: Publish - Test Results
+      # Running with:
+      # https://github.com/EnricoMi/publish-unit-test-result-action, instead
+      # of: https://github.com/mikepenz/action-junit-report, due to support for
+      # other test report types (even though most languages have some support
+      # for JUnit output).
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        junit_files: "build/test-reports/*.xml"
