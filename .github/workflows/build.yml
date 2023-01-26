@@ -24,6 +24,13 @@ jobs:
         # TODO: Add additional supported python versions.
         python-version: ["3.11", ]
 
+    permissions:
+      # Raising permissions to write Test Results. See:
+      # * https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      # * https://github.com/EnricoMi/publish-unit-test-result-action#permissions
+      checks: write
+      pull-requests: write
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -42,9 +49,11 @@ jobs:
     - name: Publish - Test Results
       # Running with:
       # https://github.com/EnricoMi/publish-unit-test-result-action, instead
-      # of: https://github.com/mikepenz/action-junit-report, due to support for
-      # other test report types (even though most languages have some support
-      # for JUnit output).
+      # of: https://github.com/mikepenz/action-junit-report, due to:
+      #
+      # * Support for other test report types (even though most languages have
+      #   some support for JUnit output).
+      # * Native Permissions instead of requiring defining PAT for auth.
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
