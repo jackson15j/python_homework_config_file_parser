@@ -1,0 +1,3 @@
+[submodule "config-chg"]
+	path = config-chg
+	url = git@github.com:DividoFinancialServices/config-chg.git
