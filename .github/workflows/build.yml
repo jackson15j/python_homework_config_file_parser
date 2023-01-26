@@ -5,13 +5,13 @@
 name: Build package
 
 on:
-  # NOTE: Opening up to build against all branches, due to doing merges
-  # locally. Typically I would stick with PR-building + Authoritative
-  # Branch/Tag building.
+  # NOTE: Opening up to build against all branches, due to doing merges locally
+  # as a sole-contributor. Typically I would stick with PR-building +
+  # Authoritative Branch/Tag building.
   push:
   pull_request:
     branches: [ main ]
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
 jobs:
@@ -34,8 +34,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
+        # Gathering Git history for `setuptools_scm` to inspect and version the
+        # package correctly.
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
+      # NOTE: no dependency caching enabled because this plugin's docs show no
+      # support for inspecting `pyproject.toml` files for dependencies yet.
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
