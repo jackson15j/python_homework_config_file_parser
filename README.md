@@ -1,4 +1,7 @@
 # python_homework_config_file_parser
+
+[![Build package](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/build.yml/badge.svg)](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/build.yml)
+
 Coding Test for parsing config files from first principles
 
 # Dev Notes
