@@ -1,0 +1,66 @@
+[project]
+name = "config_file_parser"
+dynamic = ["version"]
+license = {file = "LICENSE"}
+authors = [
+  { name="Craig Astill", email="craigastill@gmail.com" },
+]
+description = "A small example package."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["config", "parser"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jackson15j/python_homework_config_file_parser"
+"Bug Tracker" = "https://github.com/jackson15j/python_homework_config_file_parser/issues"
+
+[project.optional-dependencies]
+test = [
+    "pytest >= 7.2.1",
+    "pytest-cov >= 4.0.0",
+    "pytest-html >= 3.2.0",
+]
+
+[build-system]
+requires = ["setuptools>=62.6", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+# Version number construction and guessing based off most recent tag is done
+# with the following config. Going with a simple dev format, instead of the
+# opinonated versioning based off branches (which would be more useful on a
+# Release/Feature managed product.
+# See: https://github.com/pypa/setuptools_scm#version-number-construction.
+local_scheme = 'no-local-version'
+version_scheme = 'no-guess-dev'
+
+[tool.setuptools.dynamic]
+# Config for dynamic versioning from last Git tag. See:
+# https://github.com/pypa/setuptools_scm/
+version = { attr = "setuptools_scm.get_version" }
+
+[tool.pytest.ini_options]
+# Directories that are not visited by pytest collector:
+norecursedirs = [
+  "*.egg",
+  ".eggs",
+  "dist",
+  "build"
+]
+junit_suite_name = "tests"
+junit_logging = "all"
+junit_family = "xunit2"
+python_files = [
+    "test_*.py",
+    "*_test.py",
+    "tests.py"
+]
+# Report coverage and test output in JUnit format for CI to display, as well as
+# a human readable HTML.
+# Also dump 10 slowest tests on CLI runs for local debugging.
+addopts = "-ra --durations=10 --junitxml=build/test-reports/py_unittests.xml --html=build/test-reports/py_unittests.html --self-contained-html"
