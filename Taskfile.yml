@@ -1,0 +1,48 @@
+# https://taskfile.dev
+version: 3
+
+output: prefixed
+
+tasks:
+  create-venv:
+    summary: Use default system python version to create a virtual env.
+    cmds:
+      - python -m venv .venv
+
+  activate-venv:
+    summary: Activate the package's virtual env.
+    cmds:
+      - source .venv/bin/activate
+
+  install-deps:
+    summary: Install the dependencies for the package.
+    deps: [activate-venv]
+    cmds:
+      - pip install .
+
+  install-lint-deps:
+    summary: Install the optional linting dependencies for the package.
+    deps: [activate-venv]
+    cmds:
+      - pip install .[lint]
+
+  install-test-deps:
+    summary: Install the optional testing dependencies for the package.
+    deps: [activate-venv]
+    cmds:
+      - pip install .[test]
+
+  lint:
+    summary: Run all of the linters agasint the package.
+    deps: [activate-venv]
+    cmds:
+      - pycodestyle .
+      - flake8 .
+      - black . --check --diff
+      - mypy .
+
+  test:
+    summary: Test the package.
+    deps: [activate-venv]
+    cmds:
+      - pytest
