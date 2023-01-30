@@ -25,7 +25,7 @@ class IParser(ABC):
         self._parsed_dict: dict = {}
 
     @property
-    def files(self) -> list:
+    def files(self) -> list[Path]:
         """Returns list of supplied files to parse."""
         return self._files
 
@@ -34,8 +34,11 @@ class IParser(ABC):
         """Updates the (original) Files list with the supplied file list."""
         self._files = filepath
 
+    # FIXME: Remove type ignore once `mypy` supports different types between
+    # setter/getter properties. See: https://github.com/python/mypy/issues/3004
+    # - _"What to do about setters of a different type than their property?"_
     @property
-    def unparseable_files(self) -> list:
+    def unparseable_files(self) -> list[Path]:
         """Returns list of files that were **NOT** parsed."""
         return self._unparseable_files
 
@@ -45,7 +48,7 @@ class IParser(ABC):
         self.unparseable_files.append(filepath)
 
     @property
-    def parsed_files(self) -> list:
+    def parsed_files(self) -> list[Path]:
         """Returns list of files that were parsed."""
         return self._parsed_files
 
@@ -115,7 +118,7 @@ class IParser(ABC):
                 _data = self._read_file_contents(filepath)
             except FileNotFound as e:
                 log.warning(e)
-                self.unparseable_files = filepath
+                self.unparseable_files = filepath  # type: ignore
 
             try:
                 _dict = self._parse_content(_data)
@@ -124,5 +127,5 @@ class IParser(ABC):
                 self._unparseable_files.append(filepath)
 
             self.parsed_dict = _dict
-            self.parsed_files = filepath
+            self.parsed_files = filepath  # type: ignore
             log.debug("Successfully parsed config file:  %s.", filepath)
