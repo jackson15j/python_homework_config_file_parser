@@ -63,7 +63,19 @@ class IParser(ABC):
         """
         self._parsed_dict.update(val)
 
+    def _read_file_contents(self, filepath: Path) -> str:
+        if not filepath.exists():
+            raise FileNotFound(f"{filepath} does not exist!")
+        return filepath.read_text()
+
     @abstractmethod
+    def _parse_content(self, data: str) -> dict:
+        """Parse content schema to a python dict.
+
+        :param str data: Content to parse to a python dict.
+        :returns: dict.
+        """
+
     def parse(self, files: list[Path]) -> None:
         """Parse files into the instances `parsed_dict`.
 
@@ -71,3 +83,25 @@ class IParser(ABC):
             **will** override the value of any prior duplicate keys!
         :returns: None.
         """
+        for filepath in files:
+            _data = ""
+            _dict = {}
+            try:
+                # FIXME: #6 Decouple file reading and parsing to simplify
+                # testing. eg. File reading function creates a list of tuples:
+                # `[(<file>, <content>), ...]`, to parse later on.
+                #
+                # - PRO: Decoupled code, easier to test.
+                # - CON: Storing in memory, could`ve changed code to use a
+                #   generator.
+                _data = self._read_file_contents(filepath)
+            except FileNotFound as e:
+                self.unparsed_files = filepath
+
+            try:
+                _dict = self._parse_content(_data)
+            except ParseException as e:
+                self._unparsed_files.append(filepath)
+
+            self.parsed_dict = _dict
+            self.parsed_files = filepath
