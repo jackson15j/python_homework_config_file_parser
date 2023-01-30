@@ -1,5 +1,7 @@
 """Tests for the implemented interface methods."""
+from pathlib import Path
 import pytest
+from src.config_file_parser.parsers.iparser import FileNotFound
 from src.config_file_parser.parsers.iparser import IParser
 
 
@@ -20,7 +22,8 @@ class FakeParser(IParser):
 
     _inject_parsed_dict: dict = {}
 
-    def _read_file_contents(self, _):
+    @staticmethod
+    def _read_file_contents(_):
         """Overriding this method since it will be done in an integration test
         or downstream unittests with `tmp_path`."""
         return ""
@@ -50,6 +53,17 @@ class TestIParser:
         assert parser.parsed_dict == {}
         parser.parsed_dict = exp
         assert parser.parsed_dict == exp
+
+    def test__read_file_contents_non_existent_file_exception(self):
+        f = Path("/a/non-existent/path")
+        with pytest.raises(FileNotFound, match=f"{f} does not exist!"):
+            IParser._read_file_contents(f)
+
+    def test__read_file_contents(self, tmp_path):
+        exp = "file read"
+        f = tmp_path / "file.txt"
+        f.write_text(exp)
+        assert IParser._read_file_contents(f) == exp
 
     @pytest.mark.parametrize(
         "dict_a, dict_b,exp",
