@@ -92,4 +92,4 @@ python_files = [
 # Report coverage and test output in JUnit format for CI to display, as well as
 # a human readable HTML.
 # Also dump 10 slowest tests on CLI runs for local debugging.
-addopts = "-ra --durations=10 --junitxml=build/test-reports/py_unittests.xml --html=build/test-reports/py_unittests.html --self-contained-html"
+addopts = "-vv -ra --durations=10 --junitxml=build/test-reports/py_unittests.xml --html=build/test-reports/py_unittests.html --self-contained-html"
