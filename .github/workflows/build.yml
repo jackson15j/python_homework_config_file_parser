@@ -45,6 +45,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install Task
       uses: arduino/setup-task@v1
+      with:
+        # Authenticate to avoid rate-limiting when doing active development on
+        # the CI job.
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Create .venv
       run: task create-venv
     - name: Deps - Install dependencies
