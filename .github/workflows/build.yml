@@ -45,7 +45,16 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Deps - Install dependencies
       run: pip install .
-    # TODO: Add Linting.
+    - name: Deps - Install lint dependencies
+      run: pip install .[lint]
+    - name: Lint - pycodestyle
+      run: pycodestyle .
+    - name: Lint - flake8
+      run: flake8 .
+    - name: Lint - black
+      run: black . --check --diff
+    - name: Lint - mypy
+      run: mypy .
     - name: Deps - Install test dependencies
       run: pip install .[test]
     - name: Tests - pytest
