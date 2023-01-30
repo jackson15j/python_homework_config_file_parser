@@ -3,6 +3,15 @@
 from abc import ABC, abstractmethod
 
 
+
+class FileNotFound(Exception):
+    """File not found exception."""
+
+
+class ParseException(Exception):
+    """Failed to parse content exception."""
+
+
 class IParser(ABC):
     """Base Parser."""
 
