@@ -21,6 +21,7 @@ class IParser(ABC):
     def __init__(self):
         self._files: list[Path] = []
         self._unparsed_files: list[Path] = []
+        self._content_to_parse: list[tuple[Path, str]] = []
         self._parsed_files: list[Path] = []
         self._parsed_dict: dict = {}
 
@@ -38,6 +39,19 @@ class IParser(ABC):
     def unparsed_files(self, filepath: Path) -> None:
         """Updates the Unparsed Files list with the supplied file."""
         self.unparsed_files.append(filepath)
+
+    @property
+    def content_to_parse(self) -> list[tuple[Path, str]]:
+        """Returns list of tuples of filepath + content, to be parsed."""
+        return self._content_to_parse
+
+    @content_to_parse.setter
+    def content_to_parse(self, filepath_and_content: tuple) -> None:
+        """Updates list of tuples of filepath + content.."""
+        # TODO: #6 Move File reading to it's own class and feed this into the
+        # parser at either construction time or directly into the parse
+        # function.
+        self.content_to_parse.append((filepath_and_content))
 
     @property
     def parsed_files(self) -> list:
