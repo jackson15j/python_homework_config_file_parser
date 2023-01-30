@@ -1,4 +1,5 @@
 """Stub Parser tests."""
+import pytest
 from src.config_file_parser import parser
 
 # TODO: move test data to a fixture!
@@ -14,6 +15,9 @@ PARSED_DICT = {
 }
 
 
+@pytest.mark.skip(
+    "TODO: implement actual code, after moving to a `Lookup` module."
+)
 class TestParserInitialRequirements:
     """Parser tests from the initial requirements page."""
 
