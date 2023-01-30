@@ -43,22 +43,21 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install Task
+      uses: arduino/setup-task@v1
+    - name: Create .venv
+      run: task create-venv
     - name: Deps - Install dependencies
-      run: pip install .
+      run: task install-deps
     - name: Deps - Install lint dependencies
-      run: pip install .[lint]
-    - name: Lint - pycodestyle
-      run: pycodestyle .
-    - name: Lint - flake8
-      run: flake8 .
-    - name: Lint - black
-      run: black . --check --diff
-    - name: Lint - mypy
-      run: mypy .
+      run: task install-lint-deps
+    - name: Lint - pycodestyle, flake8, black, mypy
+      run: task lint
     - name: Deps - Install test dependencies
-      run: pip install .[test]
+      run: task install-test-deps
     - name: Tests - pytest
-      run: pytest
+      run: task test
+      # Temp disable failures?
     - name: Publish - Test Results
       # Running with:
       # https://github.com/EnricoMi/publish-unit-test-result-action, instead
