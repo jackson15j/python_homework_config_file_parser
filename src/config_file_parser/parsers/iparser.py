@@ -1,4 +1,5 @@
 """Interface that all Parser's inherit."""
+from pathlib import Path
 
 from abc import ABC, abstractmethod
 
@@ -16,8 +17,9 @@ class IParser(ABC):
     """Base Parser."""
 
     def __init__(self):
-        self._files: list = []
-        self._parsed_files: list = []
+        self._files: list[Path] = []
+        self._unparsed_files: list[Path] = []
+        self._parsed_files: list[Path] = []
         self._parsed_dict: dict = {}
 
     @property
@@ -26,9 +28,24 @@ class IParser(ABC):
         return self._files
 
     @property
+    def unparsed_files(self) -> list:
+        """Returns list of files that were **NOT** parsed."""
+        return self._unparsed_files
+
+    @unparsed_files.setter
+    def unparsed_files(self, filepath: Path) -> None:
+        """Updates the Unparsed Files list with the supplied file."""
+        self.unparsed_files.append(filepath)
+
+    @property
     def parsed_files(self) -> list:
         """Returns list of files that were parsed."""
         return self._parsed_files
+
+    @parsed_files.setter
+    def parsed_files(self, filepath: Path) -> None:
+        """Updates the Parsed Files list with the supplied parsed file."""
+        self.parsed_files.append(filepath)
 
     @property
     def parsed_dict(self) -> dict:
@@ -47,7 +64,7 @@ class IParser(ABC):
         self._parsed_dict.update(val)
 
     @abstractmethod
-    def parse(self, files: list) -> None:
+    def parse(self, files: list[Path]) -> None:
         """Parse files into the instances `parsed_dict`.
 
         :param list files: List of files to parse. Note that subsequent files
