@@ -25,3 +25,26 @@ class TestJsonParser:
         parser = JsonParser()
         parser.parse([f])
         assert parser.parsed_dict == exp
+
+    @pytest.mark.parametrize(
+        "data,exp",
+        (
+            (None, {}),
+            ("", {}),
+            ({}, {}),
+            ({"a": 1}, {"a": 1}),
+            ({"a": [1, 2]}, {"a": [1, 2]}),
+            ({"a": {"b": 2}}, {"a": {"b": 2}}),
+        ),
+    )
+    def test_parse_single_file(self, data, exp, tmp_path):
+        file_name = "file.json"
+        f = tmp_path / file_name
+        f.write_text(json.dumps(data))
+
+        parser = JsonParser()
+        parser.parse([f])
+        assert parser.parsed_dict == exp
+        assert parser.files == [f]
+        assert parser.parsed_files == [f]
+        assert parser.unparseable_files == []

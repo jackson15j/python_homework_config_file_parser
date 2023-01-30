@@ -29,6 +29,11 @@ class IParser(ABC):
         """Returns list of supplied files to parse."""
         return self._files
 
+    @files.setter
+    def files(self, filepath: list[Path]) -> None:
+        """Updates the (original) Files list with the supplied file list."""
+        self._files = filepath
+
     @property
     def unparseable_files(self) -> list:
         """Returns list of files that were **NOT** parsed."""
@@ -63,6 +68,8 @@ class IParser(ABC):
         ..NOTE::
             Expected to be used only in tests!
         """
+        if val is None:
+            return
         self._parsed_dict.update(val)
 
     @staticmethod
@@ -93,6 +100,7 @@ class IParser(ABC):
             **will** override the value of any prior duplicate keys!
         :returns: None.
         """
+        self.files = files
         for filepath in files:
             _data = ""
             _dict = {}
