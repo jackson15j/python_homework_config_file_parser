@@ -1,8 +1,10 @@
 """Interface that all Parser's inherit."""
+from logging import getLogger
 from pathlib import Path
 
 from abc import ABC, abstractmethod
 
+log = getLogger(__name__)
 
 
 class FileNotFound(Exception):
@@ -96,12 +98,15 @@ class IParser(ABC):
                 #   generator.
                 _data = self._read_file_contents(filepath)
             except FileNotFound as e:
+                log.warn(e)
                 self.unparsed_files = filepath
 
             try:
                 _dict = self._parse_content(_data)
             except ParseException as e:
+                log.warn(e)
                 self._unparsed_files.append(filepath)
 
             self.parsed_dict = _dict
             self.parsed_files = filepath
+            log.debug("Successfully parsed config file:  %s.", filepath)
