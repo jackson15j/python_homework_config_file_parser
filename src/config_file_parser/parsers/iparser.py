@@ -65,7 +65,14 @@ class IParser(ABC):
         """
         self._parsed_dict.update(val)
 
-    def _read_file_contents(self, filepath: Path) -> str:
+    @staticmethod
+    def _read_file_contents(filepath: Path) -> str:
+        """Reads file contents to a string.
+
+        :param pathlib.Path filepath: file to read.
+        :returns: str.
+        :raises: FileNotFound.
+        """
         if not filepath.exists():
             raise FileNotFound(f"{filepath} does not exist!")
         return filepath.read_text()
@@ -76,6 +83,7 @@ class IParser(ABC):
 
         :param str data: Content to parse to a python dict.
         :returns: dict.
+        :raises: ParseException.
         """
 
     def parse(self, files: list[Path]) -> None:
