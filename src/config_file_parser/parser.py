@@ -10,4 +10,4 @@ def get(path: str) -> Union[None, dict, tuple, list, str, int]:
         "key1.subkey7".
     :returns: The value of the key, whether it is a single value or a section.
     """
-    return
+    return None

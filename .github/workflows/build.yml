@@ -1,0 +1,76 @@
+# This workflow will install Python dependencies, run tests and lint with a
+# single version of Python For more information see:
+# https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Build package
+
+on:
+  # NOTE: Opening up to build against all branches, due to doing merges locally
+  # as a sole-contributor. Typically I would stick with PR-building +
+  # Authoritative Branch/Tag building.
+  push:
+  pull_request:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # TODO: Add additional supported python versions.
+        python-version: ["3.11", ]
+
+    permissions:
+      # Raising permissions to write Test Results. See:
+      # * https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      # * https://github.com/EnricoMi/publish-unit-test-result-action#permissions
+      checks: write
+      pull-requests: write
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # Gathering Git history for `setuptools_scm` to inspect and version the
+        # package correctly.
+        fetch-depth: 0
+    - name: Set up Python ${{ matrix.python-version }}
+      # NOTE: no dependency caching enabled because this plugin's docs show no
+      # support for inspecting `pyproject.toml` files for dependencies yet.
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Task
+      uses: arduino/setup-task@v1
+      with:
+        # Authenticate to avoid rate-limiting when doing active development on
+        # the CI job.
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create .venv
+      run: task create-venv
+    - name: Deps - Install dependencies
+      run: task install-deps
+    - name: Deps - Install lint dependencies
+      run: task install-lint-deps
+    - name: Lint - pycodestyle, flake8, black, mypy
+      run: task lint
+    - name: Deps - Install test dependencies
+      run: task install-test-deps
+    - name: Tests - pytest
+      run: task test
+      # Temp disable failures?
+    - name: Publish - Test Results
+      # Running with:
+      # https://github.com/EnricoMi/publish-unit-test-result-action, instead
+      # of: https://github.com/mikepenz/action-junit-report, due to:
+      #
+      # * Support for other test report types (even though most languages have
+      #   some support for JUnit output).
+      # * Native Permissions instead of requiring defining PAT for auth.
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        junit_files: "build/test-reports/*.xml"

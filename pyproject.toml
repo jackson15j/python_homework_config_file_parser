@@ -20,6 +20,12 @@ classifiers = [
 "Bug Tracker" = "https://github.com/jackson15j/python_homework_config_file_parser/issues"
 
 [project.optional-dependencies]
+lint = [
+    "black >= 22.12.0",
+    "flake8 >= 6.0.0",
+    "mypy >= 0.991",
+    "pycodestyle >= 2.10.0",
+]
 test = [
     "pytest >= 7.2.1",
     "pytest-cov >= 4.0.0",
@@ -43,6 +49,29 @@ version_scheme = 'no-guess-dev'
 # Config for dynamic versioning from last Git tag. See:
 # https://github.com/pypa/setuptools_scm/
 version = { attr = "setuptools_scm.get_version" }
+
+[tool.black]
+line-length = 82
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.mypy_cache
+    | \.venv
+    | build
+    | dist
+  )/
+  | version.py
+)
+'''
+
+[tool.mypy]
+explicit_package_bases = true
+exclude = [
+    "build",
+    ".venv",
+]
 
 [tool.pytest.ini_options]
 # Directories that are not visited by pytest collector:
