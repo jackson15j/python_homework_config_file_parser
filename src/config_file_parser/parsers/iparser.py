@@ -79,17 +79,17 @@ class IParser(ABC):
         """
         self._parsed_dict.update(val)
 
-    @staticmethod
-    def _read_file_contents(filepath: Path) -> str:
+    def _read_file_contents(self, filepath: Path) -> None:
         """Reads file contents to a string.
 
         :param pathlib.Path filepath: file to read.
-        :returns: str.
+        :returns: None.
         :raises: FileNotFound.
         """
         if not filepath.exists():
             raise FileNotFound(f"{filepath} does not exist!")
-        return filepath.read_text()
+        _content = filepath.read_text()
+        self.content_to_parse = (filepath, _content)
 
     @abstractmethod
     def _parse_content(self, data: str) -> dict:
@@ -118,7 +118,7 @@ class IParser(ABC):
                 # - PRO: Decoupled code, easier to test.
                 # - CON: Storing in memory, could`ve changed code to use a
                 #   generator.
-                _data = self._read_file_contents(filepath)
+                self._read_file_contents(filepath)
             except FileNotFound as e:
                 log.warn(e)
                 self.unparsed_files = filepath
