@@ -55,11 +55,11 @@ class IParser(ABC):
         return self._parsed_dict
 
     @parsed_dict.setter
-    def _set_parsed_dict(self, val: dict) -> None:
+    def parsed_dict(self, val: dict) -> None:
         """Updates the parsed Dict with new values.
 
         ..NOTE::
-        Expected to be used only in tests!
+            Expected to be used only in tests!
         """
         self._parsed_dict.update(val)
 
