@@ -20,7 +20,7 @@ class IParser(ABC):
 
     def __init__(self):
         self._files: list[Path] = []
-        self._unparsed_files: list[Path] = []
+        self._unparseable_files: list[Path] = []
         self._parsed_files: list[Path] = []
         self._parsed_dict: dict = {}
 
@@ -30,14 +30,14 @@ class IParser(ABC):
         return self._files
 
     @property
-    def unparsed_files(self) -> list:
+    def unparseable_files(self) -> list:
         """Returns list of files that were **NOT** parsed."""
-        return self._unparsed_files
+        return self._unparseable_files
 
-    @unparsed_files.setter
-    def unparsed_files(self, filepath: Path) -> None:
-        """Updates the Unparsed Files list with the supplied file."""
-        self.unparsed_files.append(filepath)
+    @unparseable_files.setter
+    def unparseable_files(self, filepath: Path) -> None:
+        """Updates the Unparseable Files list with the supplied file."""
+        self.unparseable_files.append(filepath)
 
     @property
     def parsed_files(self) -> list:
@@ -107,13 +107,13 @@ class IParser(ABC):
                 _data = self._read_file_contents(filepath)
             except FileNotFound as e:
                 log.warning(e)
-                self.unparsed_files = filepath
+                self.unparseable_files = filepath
 
             try:
                 _dict = self._parse_content(_data)
             except ParseException as e:
                 log.warning(e)
-                self._unparsed_files.append(filepath)
+                self._unparseable_files.append(filepath)
 
             self.parsed_dict = _dict
             self.parsed_files = filepath
