@@ -46,3 +46,19 @@ tasks:
     deps: [activate-venv]
     cmds:
       - pytest
+
+  ci-workflow:
+    summary: |
+      Rough CI workflow to run all CI steps with one command.
+
+      NOTES:
+
+        - High Risk of going out-of-sync with the CI actions!!
+        - Assumes that the: `create-venv`, task has already been called!!
+    deps: [activate-venv]
+    cmds:
+      - task: install-deps
+      - task: install-lint-deps
+      - task: install-test-deps
+      - task: lint
+      - task: test
