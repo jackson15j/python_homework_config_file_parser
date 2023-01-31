@@ -55,10 +55,10 @@ jobs:
       run: task install-deps
     - name: Deps - Install lint dependencies
       run: task install-lint-deps
-    - name: Lint - pycodestyle, flake8, black, mypy
-      run: task lint
     - name: Deps - Install test dependencies
       run: task install-test-deps
+    - name: Lint - pycodestyle, flake8, black, mypy
+      run: task lint
     - name: Tests - pytest
       run: task test
       # Temp disable failures?
