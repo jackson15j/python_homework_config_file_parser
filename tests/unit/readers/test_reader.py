@@ -1,6 +1,6 @@
-"""Stub Parser tests."""
+"""Stub Reader tests."""
 import pytest
-from src.config_file_parser import parser
+from src.config_file_parser.readers import reader
 
 # TODO: move test data to a fixture!
 PARSED_DICT = {
@@ -18,11 +18,11 @@ PARSED_DICT = {
 @pytest.mark.skip(
     "TODO: implement actual code, after moving to a `Lookup` module."
 )
-class TestParserInitialRequirements:
-    """Parser tests from the initial requirements page."""
+class TestDottedPathReaderInitialRequirements:
+    """Dotted Path Reader tests from the initial requirements page."""
 
     def test_get_returns_single_value(self):
-        assert parser.get("database.host") == PARSED_DICT["database"]["host"]
+        assert reader.get("database.host") == PARSED_DICT["database"]["host"]
 
     def test_get_returns_section_value(self):
-        assert parser.get("cache") == PARSED_DICT["cache"]
+        assert reader.get("cache") == PARSED_DICT["cache"]
