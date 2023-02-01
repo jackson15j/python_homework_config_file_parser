@@ -1,0 +1,43 @@
+@startuml
+footer Solution Class Diagram
+
+package cfp {
+        package file_reader {
+                class FileReader {
+                        files : list[Path]
+                        bad_files : list[Path]
+                        good_files : list[Path]
+                        files_and_content : list[tuple[Path, str]]
+                        +list[tuple[Path, str]] read_files_content(files: list[Path])
+                        -str read_file_content(file: Path)
+                }
+        }
+
+        package parsers {
+                interface IParser {
+                        parsed_dict : dict
+                        +dict parse(datas: list[str])
+                        -{abstract} dict convert_data_to_common_format(data: str)
+                }
+
+                class JsonParser implements IParser{
+                        -dict convert_data_to_common_format(data: str)
+                }
+                'Flow
+                "JsonParser::dict convert_data_to_common_format(data: str)" ..> IParser::parsed_dict
+                "cfp.parsers.IParser::dict parse(datas: list[str])" --> "cfp.file_reader.FileReader::str read_file_content(file: Path)"
+                "IParser::dict parse(datas: list[str])" <.. cfp.file_reader.FileReader::files_and_content
+        }
+
+        package readers {
+                class Lookup {
+                        parsed_dict : dict
+                        + Any get(dotted_path: str)
+                        - {static} convert_dotted_path(dotted_path: str)
+                }
+                'Flow.
+                Lookup::parsed_dict <-- cfp.parsers.IParser::parsed_dict
+        }
+}
+
+@enduml

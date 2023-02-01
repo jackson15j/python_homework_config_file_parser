@@ -1,0 +1,10 @@
+@startuml
+footer PoC Class Diagram
+
+class PoC {
+        +list[str] read_files(files: list[Path])
+        +list[dict] parse_data_to_common_format(datas: list[str])
+        +dict consolidate(datas: list[dict])
+        +Any look_up(dotted_path: str, data: dict)
+}
+@enduml
