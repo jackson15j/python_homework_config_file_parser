@@ -28,6 +28,71 @@ From the [Brief] provided:
 
 ## Design
 
+### Assumptions
+
+* Solution Proposal - Pros/Cons/Assumptions.
+* **Overriding** instead of **Amalgamation** ie.
+
+  ```python
+  file1 = {"a": [{"b": 1}, {"c": 1}]}
+  file2 = {"a": [{"c": 2}, {"d": 2}]}
+
+  # After consolidating files in order...
+  expected = {"a": [{"c": 2}, {"d": 2}]}  # Override.
+  dont_exp = {"a": [{"b": 1}, {"c": 2}, {"d": 2}]}  # Amalgamate.
+  ```
+* Order is currently what is passed into the File Reading function.
+
+### Requirement Queries
+
+* What is the expected scale of config files to read/parse/consolidate on
+  average?
+  * <10 - Batch reading into memory and chaining functions will be fine.
+  * 100's+ - Can tweak the design to scale horizontally (Stretch of creating a
+    Docker container + knowing the push to move to Services, sounds like
+    vertical scaling is not a temporary solution worth considering). eg.
+    * Decouple functionality into modules/Services.
+    * Message queues/pools to farm out to Workers.
+    * Store configs in a DB cluster for decoupled reads and de-dupe from hash
+      checks on write.
+    * etc.
+* Support for `.` within a key?
+  * The JSON Spec ([RFC-7159]) supports any unicode character (apart from an
+    unrelated subset) in a string. Therefore, it is legal to have a period in
+    a key (eg. `{"a.b": 1}`). Current requirements of the Problem don't state
+    this, but if this was an ongoing Project, the options would be:
+
+    * Added as a future requirement.
+    * _Eventually_ raised as a Customer bug.
+    * Documented as a design/known issue.
+
+    Support can be added by using escaped version for a Full Stop (`U+002E`)
+    and passing the dotted path as a `bytes` object to avoid Python encoding
+    it back to a Full Stop. eg.
+
+    ```python
+    "a.b".split(".")  # ['a', 'b']
+    "a\u002eb".split(".")  # ['a', 'b']
+    r"a\u002eb".encode("utf-8").split(b".")  # [b'a\\u002eb']
+    ```
+* If all supplied files are invalid JSON, what should be raised to the User?
+  * Original requirement is to gracefully reject files with invalid JSON.
+  * Returning: an _"Empty"_ value (eg. `None`, `""`, `{}`, `-1`, etc.) could be
+    seen as a False-Positive result
+    (un-configured/default/explicitly-configured) for the dotted-path looked
+    up.
+  * Logging is an option, but typically requires a prompt to get a User to
+    investigate logs as part of Debugging.
+  * I would probably push for bubbling up the exceptions to the User in some
+    way (Raw/wrapped exception, summary report, notification), so they have a
+    prompt to action the problem on Their side.
+* File ordering - Sequential order of the list given to File Reader acceptable?
+  Or:
+  * Alphabetical?
+  * File creation/modified date-time?
+  * Arbitrary? - (eg. filename/content hash, filesize, other).
+  * Random? - (99% positive that in this case, a _"Known"_/Predictable order is
+    required).
 
 ### PoC (Proof of Concept)
 
@@ -77,41 +142,6 @@ store/fetch/de-dupe configs with a DB, etc).
 
 ### Cons
 
-### Assumptions
-
-* Solution Proposal - Pros/Cons/Assumptions.
-* **Overriding** instead of **Amalgamation** ie.
-
-  ```python
-  file1 = {"a": [{"b": 1}, {"c": 1}]}
-  file2 = {"a": [{"c": 2}, {"d": 2}]}
-
-  # After consolidating files in order...
-  expected = {"a": [{"c": 2}, {"d": 2}]}  # Override.
-  dont_exp = {"a": [{"b": 1}, {"c": 2}, {"d": 2}]}  # Amalgamate.
-  ```
-
-### Requirement Queries
-
-* Support for `.` within a key?
-    * The JSON Spec ([RFC-7159]) supports any unicode character (apart from an
-      unrelated subset) in a string. Therefore, it is legal to have a period in
-      a key (eg. `{"a.b": 1}`). Current requirements of the Problem don't state
-      this, but if this was an ongoing Project, the options would be:
-
-      * Added as a future requirement.
-      * _Eventually_ raised as a Customer bug.
-      * Documented as a design/known issue.
-
-      Support can be added by using escaped version for a Full Stop (`U+002E`)
-      and passing the dotted path as a `bytes` object to avoid Python encoding
-      it back to a Full Stop. eg.
-
-      ```python
-      "a.b".split(".")  # ['a', 'b']
-      "a\u002eb".split(".")  # ['a', 'b']
-      r"a\u002eb".encode("utf-8").split(b".")  # [b'a\\u002eb']
-      ```
 
 
 ### Module Details
@@ -216,7 +246,7 @@ language-specific/agnostic cross-platform alternatives.
   of Green Fields / small MVP, feature creep, enforcing my assumptions, wasted
   effort) PoC?
 * Reality vs Solution Design.
-
+* Testing - Refactor to use Fixtures. Integration test with real files.
 
 
 
