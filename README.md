@@ -28,6 +28,32 @@ From the [Brief] provided:
 
 ## Design
 
+
+### PoC (Proof of Concept)
+
+I realised that I got into my Own head over this coding exercise and made the
+following mistakes:
+
+* Over Architecting.
+* Too Deep, Too Soon.
+* Feature Creep.
+* Optimising/Refactoring too soon.
+* Bulky _"MVP"_ (Minimal Viable Product).
+
+ie. too much wasted effort in the wrong direction.
+
+The PoC Designs **TOOD link** and code **TODO link** is what I should have
+started with originally.
+
+**TODO describe PoC in detail.**
+
+---
+
+<details><summary>Following is the Original Solution Design notes, in a fold,
+to show my original thinking.</summary>
+
+### Original Solution
+
 [plantUml] design to solve the above problem (See: [Solution Class Design]):
 
 ![Solution Class Design][Solution Class Design]
@@ -127,7 +153,7 @@ The Parser handles the conversion of the file content into the common format.
 
 **TODO**
 
-
+</details>
 
 # Dev Notes
 
