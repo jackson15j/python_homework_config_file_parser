@@ -114,8 +114,8 @@ started with originally.
 
 ---
 
-<details><summary>Following is the Original Solution Design notes, in a fold,
-to show my original thinking.</summary>
+<details><summary><h3>Following is the Original Solution Design notes, in a
+fold, to show my original thinking.</h3></summary>
 
 ### Original Solution
 
@@ -184,6 +184,8 @@ The Parser handles the conversion of the file content into the common format.
 **TODO**
 
 </details>
+
+---
 
 # Dev Notes
 
