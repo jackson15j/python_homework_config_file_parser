@@ -54,6 +54,39 @@ store/fetch/de-dupe configs with a DB, etc).
 ### Assumptions
 
 * Solution Proposal - Pros/Cons/Assumptions.
+* **Overriding** instead of **Amalgamation** ie.
+
+  ```python
+  file1 = {"a": [{"b": 1}, {"c": 1}]}
+  file2 = {"a": [{"c": 2}, {"d": 2}]}
+
+  # After consolidating files in order...
+  expected = {"a": [{"c": 2}, {"d": 2}]}  # Override.
+  dont_exp = {"a": [{"b": 1}, {"c": 2}, {"d": 2}]}  # Amalgamate.
+  ```
+
+### Requirement Queries
+
+* Support for `.` within a key?
+    * The JSON Spec ([RFC-7159]) supports any unicode character (apart from an
+      unrelated subset) in a string. Therefore, it is legal to have a period in
+      a key (eg. `{"a.b": 1}`). Current requirements of the Problem don't state
+      this, but if this was an ongoing Project, the options would be:
+
+      * Added as a future requirement.
+      * _Eventually_ raised as a Customer bug.
+      * Documented as a design/known issue.
+
+      Support can be added by using escaped version for a Full Stop (`U+002E`)
+      and passing the dotted path as a `bytes` object to avoid Python encoding
+      it back to a Full Stop. eg.
+
+      ```python
+      "a.b".split(".")  # ['a', 'b']
+      "a\u002eb".split(".")  # ['a', 'b']
+      r"a\u002eb".encode("utf-8").split(b".")  # [b'a\\u002eb']
+      ```
+
 
 ### Module Details
 
@@ -174,6 +207,8 @@ language-specific/agnostic cross-platform alternatives.
 [PoC Class Design]: http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/jackson15j/python_homework_config_file_parser/main/docs/designs/poc_class.plantuml
 [PoC Block Design]: http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/jackson15j/python_homework_config_file_parser/main/docs/designs/poc_block.plantuml
 [PoC Sequence Design]: http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/jackson15j/python_homework_config_file_parser/main/docs/designs/poc_sequence.plantuml
+
+[RFC-7159]: https://www.rfc-editor.org/rfc/rfc7159#section-8
 
 [`pathlib.Path`]: https://docs.python.org/3/library/pathlib.html
 [`os.path`]: https://docs.python.org/3/library/os.path.html
