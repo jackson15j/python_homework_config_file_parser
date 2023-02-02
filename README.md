@@ -213,15 +213,25 @@ brackets.:
 
 For the PoC:
 
-- Code is under: [`poc.py`].
-- Tests are under: [`test_poc.py`].
-- To access the `get` entrypoint from CLI:
-  - Build the Python package (`go-task build`) and install into a virtualenv.
-  - `get` will be added to the `PATH`.
-    - Help: `get -h`.
-    - Run: `get <dotted_path> <file1> <file2> ...`.
+* Code is under: [`poc.py`].
+* Tests are under: [`test_poc.py`].
+* To access the `get` entrypoint from CLI:
+  * Build the Python package (`go-task build`) and install into a virtual env.
+  * `get` will be added to the `PATH`.
+    * Help: `get -h`.
+    * Run: `get <dotted_path> <file1> <file2> ...`.
+
+For the original Solution:
 
 ## Testing:
+* Code entrypoint is: [`main.py`].
+* Tests are under: [`tests/`].
+* To access the `solution_get` entrypoint from CLI:
+  * Build the Python package (`go-task build`) and install into a virtual env.
+  * `solution_get` will be added to the `PATH`.
+    * Help: `solution_get -h`.
+    * Run: `solution_get <dotted_path> <file1> <file2> ...`.
+
 
 * From repo root directory: `pytest` (`go-task test`).
 

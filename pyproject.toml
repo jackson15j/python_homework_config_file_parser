@@ -37,6 +37,7 @@ test = [
 
 [project.scripts]
 get = "config_file_parser.poc.poc:get"
+solution_get = "config_file_parser.main:main"
 
 [build-system]
 requires = ["setuptools>=62.6", "setuptools_scm[toml]>=6.2"]
