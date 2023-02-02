@@ -1,6 +1,7 @@
 # python_homework_config_file_parser
 
 [![Build package](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/build.yml/badge.svg)](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/build.yml)
+[![Release](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/release.yml/badge.svg)](https://github.com/jackson15j/python_homework_config_file_parser/actions/workflows/release.yml)
 
 Coding Test for parsing config files from first principles.
 
@@ -407,8 +408,6 @@ to act on their own continuous development.
   * Affected by knock-on effects of above initial poor direction lapsed
     discipline. I should have spent more time on the additional features to
     show off me as an Engineer, such as:
-    * Release pipeline to publish to Github Releases on tags. eg. from an older
-      project of mine: [`release.yml`].
     * Multi-target Docker container for building/running the library.
 
 
