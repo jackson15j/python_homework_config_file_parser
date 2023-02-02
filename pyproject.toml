@@ -20,6 +20,9 @@ classifiers = [
 "Bug Tracker" = "https://github.com/jackson15j/python_homework_config_file_parser/issues"
 
 [project.optional-dependencies]
+build = [
+    "build >= 0.10.0",
+]
 lint = [
     "black >= 22.12.0",
     "flake8 >= 6.0.0",

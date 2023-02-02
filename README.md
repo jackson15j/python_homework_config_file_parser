@@ -207,10 +207,19 @@ brackets.:
    `<group>` is one of:
    * `lint` (`go-task install-lint-deps`).
    * `test` (`go-task install-test-deps`).
+   * `build` (`go-task install-build-deps`).
 
 ## Usage
 
-**TODO**
+For the PoC:
+
+- Code is under: [`poc.py`].
+- Tests are under: [`test_poc.py`].
+- To access the `get` entrypoint from CLI:
+  - Build the Python package (`go-task build`) and install into a virtualenv.
+  - `get` will be added to the `PATH`.
+    - Help: `get -h`.
+    - Run: `get <dotted_path> <file1> <file2> ...`.
 
 ## Testing:
 
@@ -273,6 +282,9 @@ language-specific/agnostic cross-platform alternatives.
 [PyTest: `tmp_path`]: https://docs.pytest.org/en/stable/how-to/tmp_path.html
 [pytest]: https://docs.pytest.org/en/stable/contents.html
 [`dict.update()`]: https://docs.python.org/3/library/stdtypes.html#dict.update
+
+[`poc.py`]: src/config_file_parser/poc/poc.py
+[`test_poc.py`]: tests/unit/poc/test_poc.py
 
 [Taskfile]: https://taskfile.dev
 [make]: https://www.gnu.org/software/make/
