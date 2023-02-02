@@ -3,17 +3,17 @@
 footer PoC Sequence Diagram
 
 actor user
-boundary edge
+boundary entrypoint
 participant file_reader
 participant parser
 participant consolidate
 participant lookup
 
-user -> edge: GET (file1, file2, ...), dotted_path
-edge -> file_reader: Gracefully read files that exist.
+user -> entrypoint: `get <dotted_path> <file1 [file2 ...]>`
+entrypoint -> file_reader: Gracefully read files that exist.
 file_reader -> parser: Gracefully parse data to common format.
 parser -> consolidate: Sequentially consolidate datas.
 consolidate -> lookup: Translate dotted_path + lookup in data.
-edge <-- lookup: Result
-user <-- edge: Result
+entrypoint <-- lookup: Result
+user <-- entrypoint: Result
 @enduml
