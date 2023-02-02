@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Install Task
+      uses: arduino/setup-task@v1
+    - name: Deps - Install dependencies
+      run: task install-deps
+    - name: Deps - Install test dependencies
+      run: task install-test-deps
+    - name: Build - Python Package
+      run: task build
+    # FIXME: #2 figure out why this task throws an exit 1 after return the
+    # expected parsed value?
+    #
+    # - name: System - run App (entrypoint)
+    #   run: task test-entrypoint
+    - uses: ncipollo/release-action@v1
+      with:
+        # Store both the Python Wheel + generated renderings on Release page.
+        artifacts: "dist/*.*,build/output/*.*"
+        token: ${{ secrets.GITHUB_TOKEN }}
