@@ -1,0 +1,15 @@
+@startuml
+footer PoC Block diagram
+
+actor user
+
+package "PoC" {
+        [file_reader] --> [parser]
+        [parser] --> [consolidate]
+        [consolidate] --> [lookup]
+}
+
+user --> [file_reader]
+user <-- [lookup]
+
+@enduml

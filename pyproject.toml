@@ -20,6 +20,9 @@ classifiers = [
 "Bug Tracker" = "https://github.com/jackson15j/python_homework_config_file_parser/issues"
 
 [project.optional-dependencies]
+build = [
+    "build >= 0.10.0",
+]
 lint = [
     "black >= 22.12.0",
     "flake8 >= 6.0.0",
@@ -31,6 +34,10 @@ test = [
     "pytest-cov >= 4.0.0",
     "pytest-html >= 3.2.0",
 ]
+
+[project.scripts]
+get = "config_file_parser.poc.poc:get"
+solution_get = "config_file_parser.main:main"
 
 [build-system]
 requires = ["setuptools>=62.6", "setuptools_scm[toml]>=6.2"]
@@ -59,6 +66,7 @@ exclude = '''
     | \.git          # root of the project
     | \.mypy_cache
     | \.venv
+    | \.venv_entrypoint
     | build
     | dist
   )/
@@ -70,7 +78,7 @@ exclude = '''
 explicit_package_bases = true
 exclude = [
     "build",
-    ".venv",
+    ".venv_entrypoint",
 ]
 
 [tool.pytest.ini_options]

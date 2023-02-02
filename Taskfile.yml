@@ -20,6 +20,12 @@ tasks:
     cmds:
       - pip install .
 
+  install-build-deps:
+    summary: Install the optional building dependencies for the package.
+    deps: [activate-venv]
+    cmds:
+      - pip install .[build]
+
   install-lint-deps:
     summary: Install the optional linting dependencies for the package.
     deps: [activate-venv]
@@ -46,6 +52,45 @@ tasks:
     deps: [activate-venv]
     cmds:
       - pytest
+
+  build:
+    summary: Build the package.
+    deps: [activate-venv]
+    cmds:
+      - python -m build
+
+  test-entrypoint:
+    summary: |
+      Integration test the package's entrypoint.
+
+      - Install build dependencies.
+      - Build package.
+      - Recreate a task unique venv.
+      - Explicitly install the built package wheel.
+      - Use the `get` entrypoint to make a look-up against all of the example
+        JSON files in: `config-chg/fixtures/`.
+      - TODO - Grab console output to test the output is correct.
+    dir: '{{.ROOT_DIR}}'
+    deps: [install-build-deps]
+    cmds:
+      - rm -rf .venv_entrypoint dist
+      - ls -al
+      - task: install-deps
+      - task: install-lint-deps
+      - task: install-test-deps
+      - task: build
+      - python -m venv .venv_entrypoint
+      - source .venv_entrypoint/bin/activate && which python
+      - source .venv_entrypoint/bin/activate && pip list
+      - source .venv_entrypoint/bin/activate && pip install dist/*.whl
+      - source .venv_entrypoint/bin/activate && pip list
+      - |
+        source .venv_entrypoint/bin/activate && \
+        get "database.host" \
+        config-chg/fixtures/config.invalid.json \
+        config-chg/fixtures/config.local.json \
+        config-chg/fixtures/config.also_invalid.json \
+        config-chg/fixtures/config.json
 
   ci-workflow:
     summary: |

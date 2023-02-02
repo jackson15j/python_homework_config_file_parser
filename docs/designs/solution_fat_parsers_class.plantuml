@@ -1,0 +1,38 @@
+@startuml
+footer Solution (Fat Parser) Class Diagram
+
+package cfp {
+        package parsers {
+                interface IParser {
+                        files : list[Path]
+                        bad_files : list[Path]
+                        good_files : list[Path]
+                        files_and_content : list[tuple[Path, str]]
+                        parsed_dict : dict
+                        +dict parse(datas: list[str])
+                        -str read_file_content(file: Path)
+                        -{abstract} dict convert_data_to_common_format(data: str)
+                }
+                note left of IParser::"parse(datas: list[str])"
+                  Loop file reading, parsing and consolidation.
+                end note
+
+                class JsonParser implements IParser{
+                        -dict convert_data_to_common_format(data: str)
+                }
+                'Flow
+                "JsonParser::dict convert_data_to_common_format(data: str)" ..> IParser::parsed_dict
+        }
+
+        package readers {
+                class Lookup {
+                        parsed_dict : dict
+                        + Any get(dotted_path: str)
+                        - {static} convert_dotted_path(dotted_path: str)
+                }
+                'Flow.
+                Lookup::parsed_dict <-- cfp.parsers.IParser::parsed_dict
+        }
+}
+
+@enduml
