@@ -18,6 +18,8 @@ jobs:
         python-version: "3.11"
     - name: Install Task
       uses: arduino/setup-task@v1
+    - name: Create .venv
+      run: task create-venv
     - name: Deps - Install dependencies
       run: task install-deps
     - name: Deps - Install test dependencies
