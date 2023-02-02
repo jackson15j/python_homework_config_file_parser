@@ -22,6 +22,8 @@ jobs:
       run: task create-venv
     - name: Deps - Install dependencies
       run: task install-deps
+    - name: Deps - Install build dependencies
+      run: task install-build-deps
     - name: Deps - Install test dependencies
       run: task install-test-deps
     - name: Build - Python Package
