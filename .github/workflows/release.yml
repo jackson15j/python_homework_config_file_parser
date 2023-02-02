@@ -8,6 +8,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      # Need permission to write to the Releases tab now.
+      # https://github.com/ncipollo/release-action/issues/208.
+      contents: write
     steps:
     - uses: actions/checkout@v3
       with:
