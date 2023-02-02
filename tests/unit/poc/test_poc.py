@@ -1,6 +1,8 @@
 """Tests for the Proof of Concept class."""
 import json
 import pytest
+from pathlib import Path
+from src.config_file_parser.poc.poc import get_cli_args
 from src.config_file_parser.poc.poc import PoC
 
 
@@ -132,3 +134,35 @@ class TestPoC:
         assert parser2.look_up("cache") == {
             "redis": {"host": "redis", "port": 6379}
         }
+
+
+class TestPoCEntrypoint:
+    def test_parse_cli_args_no_args_raises(self):
+        with pytest.raises(SystemExit):
+            # Nested Exception: `error: the following arguments are required:
+            # dotted_path, files`.
+            get_cli_args().parse_args()
+
+    def test_parse_cli_args_no_files_raises(self):
+        with pytest.raises(SystemExit):
+            # Nested Exception: `error: the following arguments are required:
+            # files`.
+            get_cli_args().parse_args(["a.b"])
+
+    def test_parse_cli_args_single_file(self):
+        exp_path = "a.b"
+        file1 = "file1.json"
+        exp_file1 = Path(file1)
+        args = get_cli_args().parse_args([exp_path, file1])
+        assert args.dotted_path == exp_path
+        assert args.files == [exp_file1]
+
+    def test_parse_cli_args_multiple_file(self):
+        exp_path = "a.b"
+        file1 = "file1.json"
+        exp_file1 = Path(file1)
+        file2 = "file2.json"
+        exp_file2 = Path(file2)
+        args = get_cli_args().parse_args([exp_path, file1, file2])
+        assert args.dotted_path == exp_path
+        assert args.files == [exp_file1, exp_file2]
