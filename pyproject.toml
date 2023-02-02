@@ -32,6 +32,9 @@ test = [
     "pytest-html >= 3.2.0",
 ]
 
+[project.scripts]
+get = "config_file_parser.poc.poc:get"
+
 [build-system]
 requires = ["setuptools>=62.6", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
