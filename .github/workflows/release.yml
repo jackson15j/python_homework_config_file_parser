@@ -35,6 +35,6 @@ jobs:
     #   run: task test-entrypoint
     - uses: ncipollo/release-action@v1
       with:
-        # Store both the Python Wheel + generated renderings on Release page.
-        artifacts: "dist/*.*,build/output/*.*"
+        # Store the Python Wheel on Release page.
+        artifacts: "dist/*.*"
         token: ${{ secrets.GITHUB_TOKEN }}
